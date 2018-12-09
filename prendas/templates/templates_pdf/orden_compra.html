@@ -1,0 +1,477 @@
+{% load i18n admin_static suit_tags %}
+{% load staticfiles %}
+{% load thumbnail %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Korozo</title>
+  
+  <style type="text/css">
+      
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+a {
+  color: grey;
+  text-decoration: none;
+}
+
+body {
+  position: relative;
+
+  margin: 0 auto; 
+  color: #555555;
+  background: #FFFFFF; 
+  font-family: Arial, sans-serif; 
+  font-size: 12px; 
+}
+
+header {
+  padding: 10px 0;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #AAAAAA;
+}
+
+#logo {
+  float: left;
+  margin-top: 8px;
+}
+
+#logo img {
+  height: 70px;
+   opacity: 0.7;
+}
+
+#company span {
+  color: #505050;
+  text-align: right;
+  width: 52px;
+  margin-right: 10px;
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+
+.center{
+  text-align: center !important;
+}
+
+#company {
+  float: right;
+  text-align: left;
+}
+#details {
+  margin-bottom: 50px;
+}
+
+#client {
+  padding-left: 6px;
+  border-left: 6px solid #f3b049;
+  float: left;
+}
+
+#client span {
+  color: #505050;
+  text-align: left;
+  width: 52px;
+  margin-right: 10px;
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+#client .to {
+  color: #777777;
+}
+
+h2.name {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+
+#invoice {
+  float: right;
+  text-align: right;
+  border-right: 6px solid #f3b049;
+}
+
+#invoice h1 {
+  color: #f3b049;
+  font-size: 2.4em;
+  line-height: 1em;
+  font-weight: normal;
+  margin: 0  0 10px 0;
+
+}
+
+#invoice .date {
+  font-size: 1.1em;
+  color: #777777;
+}
+
+#table-striped {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: 20px;
+}
+
+
+
+#table-striped tr:nth-child(2n-1) td {
+  background: #F5F5F5;
+}
+
+#table-striped th,
+#table-striped td {
+  text-align: center;
+}
+
+#table-striped th {
+  color: #505050;
+  border-bottom: 2px solid #f3b049;
+  white-space: nowrap;        
+  font-weight: normal;
+}
+
+#table-striped .service,
+#table-striped .desc {
+  text-align: left;
+}
+
+#table-striped td {
+  padding: 5px;
+  text-align: justify;
+}
+
+#table-striped td.service,
+#table-striped td.desc {
+  vertical-align: top;
+}
+
+#table-striped td.unit,
+#table-striped td.qty,
+#table-striped td.total {
+  font-size: 1em;
+}
+
+#table-striped td.grand {
+  border-top: 1px solid #505050;
+}
+
+
+
+#thanks{
+  font-size: 2em;
+  margin-bottom: 50px;
+}
+
+#notices{
+  padding-left: 6px;
+  border-left: 6px solid #f3b049;  
+}
+
+#notices .notice {
+  font-size: 1em;
+}
+
+footer {
+  color: #777777;
+  width: 100%;
+
+  position: absolute;
+  bottom: 10;
+  border-top: 1px solid #AAAAAA;
+  padding: 8px 0;
+  text-align: center;
+}
+table tfoot td {
+  padding: 10px 20px;
+  border-bottom: none;
+  font-size: 1em;
+  white-space: nowrap; 
+  font-weight: bold;
+
+}
+
+table tfoot tr {
+ 
+border-right: 6px solid #f3b049;
+  font-weight: bold;
+
+}
+
+</style>
+
+
+  </head>
+
+  <body>
+    <header class="clearfix">
+      <div id="logo">
+        <img src="http://127.0.0.1:8000/static/imagenes/logo.png" alt="KOROZO">
+      </div>
+
+      <div id="company">
+        <!-- <h2 class="name">{{equipo.empresa_anidada.nombre|upper}}</h2> -->
+        <h2 class="name">KOROZO S.A.S</h2>
+        <div><span>NIT</span>900922698-1</div>
+        <div><span>DIRECCIÓN</span>Calle 39 #46-09</div>
+        <div><span>TELÉFONO</span>3799790 - 302 218 0688</div>
+        <div><span>EMAIL</span><a href="mailto:{{equipo.empresa_anidada.correo}}">comercial@suarzul.com</a></div>
+      </div>
+      
+    </header>
+
+
+    <main>
+      <div id="details" class="clearfix">
+        <div id="client">
+
+        <h2>FICHA DE PROGRAMACIÓN PARA CORTE</h2>
+        <h4>{{pedido|upper}}</h4>
+        </div>
+
+      </div>
+
+
+      <table id="table-striped">
+          <tr> 
+            <th colspan="4" style="background-color: #f3b049; "><b>INFORMACIÓN GENERAL</b></th>
+          </tr>
+        <tbody>
+
+
+
+        <tr>
+        <td><b>Empresa:</b></td>
+        <td>{{empresa|upper}}</td>
+        <td><b>Código de orden de compra:</b></td>
+        <td>{{codigo}}</td>
+        </tr>
+
+
+        <tr>
+        <td><b>Fecha recibida:</b></td>
+        <td>{{llega}}</td>
+        <td><b>Fecha estimada de entrega:</b></td>
+        <td>{{entrega}}</td>
+        </tr>
+
+
+        <tr>
+        <td colspan="2" class= "center"><b>Logo:</b></td>
+       <td colspan="2" class= "center" ><b>Diseño de prenda:</b></td>
+        </tr>
+
+        <tr>
+
+          <td colspan="2" class= "center"><img src='http://127.0.0.1:8000{% thumbnail detalle_obj.logo 150x150 crop %}'></td>
+ 
+          <td colspan="2" class= "center"><img src='http://127.0.0.1:8000{% thumbnail detalle_obj.diseno 150x150 crop %}'></td>
+        </tr>
+
+        <tr> <th colspan="4"> <b>DETALLE DE LA PRENDA</b> </th></tr>
+
+
+
+        <tr>
+            <td><b>Dotación:</b></td>
+            {% if dotacion %}
+            <td colspan="3">{{dotacion|upper}}</td>
+            {% else %}
+            <td colspan="3">DOTACION SIN REGISTRAR</td>
+            {% endif %}
+        </tr>
+
+        <tr>
+            <td><b>Tipo de prenda:</b></td>
+            <td colspan="3">{{prenda|upper}}</td>
+        </tr>
+
+        <tr>
+            <td><b>Promedio de prenda:</b></td>
+            <td colspan="3">{{promedio_prenda}}</td>
+        </tr>
+
+
+    <tr> <th colspan="4"> <b>TALLAS</b> </th></tr>
+    <tr>
+      <th colspan="2">Talla</th>
+      <th colspan="2">Cantidad</th>
+    </tr>
+
+            {% for tal in talla_cantidad %}       
+                <tr>
+
+                    <td colspan="2" class="center">{{tal.talla|upper}}</td>
+                    <td colspan="2" class="center">{{tal.cantidad}}</td>
+                
+                
+                </tr>
+
+                {% empty %}
+                <tr> <td colspan="4">TALLAS SIN REGISTRAR</td></tr>
+            {% endfor %}
+    <tr>
+        <td colspan="1"></td>
+        <td colspan="2"><b>TOTAL</b></td>
+        <td><b>{{total}}</b></td>
+    </tr>
+
+    <tr>
+        <th colspan="4"> <b>DETALLE DE MATERIA PRIMA</b> </th>
+    </tr>
+    
+    
+    
+    <tr>
+        <td><b>Materia prima:</b></td>
+        <td >{{materia_prima|upper}}</td>
+        <td><b>Lote:</b></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td><b>Color:</b></td>
+        <td>{{color|upper}}</td>
+        <td><b>Proveedor:</b></td>
+        <td>{{proveedor|default:"-"}}</td>
+    </tr>
+
+    <tr>
+        <td><b>Largo de Capa:</b></td>
+        <td></td>
+        <td><b>Ancho de tela:</b></td>
+        <td></td>
+    </tr>
+    
+    <tr>
+        <td><b>Composición:</b></td>
+        <td colspan="3">{{composicion}}</td>
+    </tr>
+
+    <tr>
+        <td><b>Tela requerida:</b></td>
+        <td colspan="3">{{cant_comprar}} m</td>
+    </tr>
+
+          <tr> <th colspan="4"> <b>OBSERVACIONES</b> </th></tr>
+
+          <tr>
+            <td colspan="4">
+   
+      <table id="table-striped">
+        <!-- <thead>
+          <tr>
+            <th>#</th>
+            <th class="service">PRODUCTO / SERVICIO</th>          
+            <th>PRECIO</th>
+            <th>CANT</th>
+            <TH>IVA</TH>
+            <th>TOTAL</th>
+          </tr>
+        </thead> -->
+          <tr >
+            {% if observaciones %}
+            <td colspan="3">{{observaciones|upper}}</td>
+            {% else %}
+            <td colspan="3">OBSERVACIONES SIN REGISTRAR</td>
+            {% endif %}
+          </tr>
+          <tr >
+            {% if observacionesProduccion %}
+            <td colspan="3">{{observacionesProduccion|upper}}</td>
+            {% else %}
+            <td colspan="3">OBSERVACIONES SIN REGISTRAR</td>
+            {% endif %}
+          </tr>
+          
+
+        <!-- <tfoot>
+            <td colspan="3"></td>
+            <td colspan="2">TOTAL</td>
+            <td>$ NOMBRE</td>
+          </tr>
+        </tfoot> -->
+         
+
+
+
+              </table>
+            </td>
+          </tr>
+
+
+
+
+          <tr> <th colspan="4"> <b>MUESTRA DE TELA</b> </th></tr>
+
+          <tr>
+            <td colspan="4">
+   
+      <table id="table-striped">
+        <!-- <thead>
+          <tr>
+            <th>#</th>
+            <th class="service">FECHA</th>          
+            <th class="service">HORA</th>
+            <th>OBSERVACIÓN</th>
+            <th>DIRECCION</th>
+            <TH>TIPO</TH>
+            <th>MAP</th>
+          </tr>
+        </thead> -->
+        <tbody style='height:200px;display:block;overflow:scroll'>
+
+
+        </tbody>
+
+
+         
+
+
+
+              </table>
+            </td>
+          </tr>
+
+
+
+
+
+
+
+        </tbody>
+          
+          <tr>
+            <td colspan="2"><b>____________________________________</b></td>
+            <td colspan="2"><b>____________________________________</b></td>
+          </tr>
+          <tr>
+              <td colspan="2"><b>Coordinadora de producción</b></td>
+              <td colspan="2"><b>Encargado de Corte</b></td>
+          </tr>
+
+      </table>
+
+ 
+      <div id="notices">
+        <div>Responsable:</div>
+        <div class="notice">NOMBRE NOMBRE</div>
+      </div>
+    </main>
+    <br>
+    <footer>
+     Generado desde PMS - KOROZO {% now "jS F Y H:i" %}
+    </footer>
+  </body>
+</html>

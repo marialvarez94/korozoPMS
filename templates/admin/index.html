@@ -1,0 +1,81 @@
+{% extends "admin/base_site.html" %}
+
+{% load staticfiles %}
+
+{% block title %}
+    Inicio
+{% endblock title %}
+
+{% block extrahead %}
+
+<link rel="stylesheet" type="text/css" href="{% static "index.css" %}" />
+<style>
+body.suit_layout_vertical:not(.login) #container #content {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-bottom: 96px;
+    padding-top: 4rem;
+    /* text-align: center; */
+    margin: auto;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="row" style="text-align: center">
+  <div class="col-xs-12 col-md-12">
+
+       <nav>
+            <ul class="nav">
+                {% if request.user.groups.all.0.name == "EMPRESA" %}
+                    <li class="icono2"><a href="/admin/prendas/pedido/add/"></a>Agregar Orden de Compra</li>
+                    <li class="icono8"><a href="/admin/prendas/control_prendas/"></a>Control de Prendas</li>
+                    <li class="icono5"><a href="/admin/programacion/"></a>Ver Programación</li>
+                    <li class="icono7"><a href="/admin/prendas/clientes/"></a>Mi Empresa</li>
+                {% elif request.user.groups.all.0.name == "AUDITOR" %}
+                    <li class="icono1"><a href="/admin/prendas/pedido/"></a>Ordenes de Compra</li>
+                    <li class="icono2"><a href="/admin/prendas/inventario_prendas/"></a>Inventario de Prendas</li>
+                    <li class="icono4"><a href="/admin/prendas/taller/add/"></a>Agregar Taller</li>
+                {% elif request.user.groups.all.0.name == "COMERCIANTE" %}
+                    <li class="icono1"><a href="/admin/prendas/pedido/add/"></a>Agregar Orden de Compra</li>
+                    <li class="icono7"><a href="/admin/prendas/clientes/add/"></a>Agregar Empresa</li>
+                    <li class="icono11"><a href="/admin/prendas/materia_prima/add/"></a>Agregar Materia Prima</li>
+                    <li class="icono5"><a href="/admin/programacion/"></a>Ver Programación</li>
+                {% elif request.user.groups.all.0.name == "LOGISTICO" %}
+                    <li class="icono1"><a href="/admin/prendas/factura_compramp/add/"></a>Realizar Compra</li>
+                    <li class="icono10"><a href="/admin/prendas/inventario_materia_prima/"></a>Inventario de Materia Prima</li>
+                    <li class="icono2"><a href="/admin/prendas/inventario_prendas/"></a>Inventario de Prendas</li>
+                    <li class="icono3"><a href="/admin/prendas/proveedores/add/"></a>Agregar Proveedor</li>
+                {% else %}
+                    <li class="icono1"><a href="/admin/prendas/factura_compramp/"></a>Consultar Compras</li>
+                    <li class="icono10"><a href="/admin/prendas/inventario_materia_prima/"></a>Inventario de Materia Prima</li>
+                    <li class="icono2"><a href="/admin/prendas/inventario_prendas/"></a>Inventario de Prendas</li>
+                    <li class="icono7"><a href="/admin/prendas/clientes/"></a>Consultar Empresas</li>
+
+                    <li class="icono6"><a href="/admin/prendas/pedido/"></a>Consultar Ordenes de Compra</li>
+                    <li class="icono9"><a href="/admin/usuarios/administradores/add/"></a>Agregar Usuario</li>
+                    <li class="icono5"><a href="/admin/programacion/"></a>Ver Programación</li>
+                    <li class="icono8"><a href="/admin/prendas/control_prendas/"></a>Control de Prendas</li>
+
+                {% endif %}
+            </ul>
+        </nav>
+        
+  </div>
+</div>
+
+
+{% endblock content %}
+
+{% block extrajs %}
+
+{% endblock extrajs %}

@@ -1,0 +1,212 @@
+.icon-home:after { background-image:"static/img/1.png"} 
+.icon-cog:after { content: "\2999"; } 
+.icon-cw:after { content: "\27f3"; } 
+.icon-location:after { content: "\2629"; } 
+
+
+/*a {
+  text-decoration: none;
+  color: #DD6C4F;
+}
+
+a:hover {
+  text-decoration:underline;
+}
+
+a:focus { 
+  outline: none;
+}*/
+
+.page-wrap {
+  width: 960px;
+  margin: 80px auto;
+}
+
+.nav {
+  list-style: none;
+  text-align: center;
+}
+
+.nav li {
+  position: relative;
+  display: inline-block;
+  margin-right: -4px; /* See: http://css-tricks.com/fighting-the-space-between-inline-block-elements/ */
+}
+
+.breadcrumbs{
+  visibility: hidden;
+}
+
+.icono1 a {
+  display: block;
+  background-image: url('imagenes/ordenCompra.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+.icono2 a {
+  display: block;
+  background-image: url('imagenes/inventarioPrendas.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+.icono3 a {
+  display: block;
+  background-image: url('imagenes/proveedor.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+.icono4 a {
+  display: block;
+  background-image: url('imagenes/taller.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+
+.icono5 a {
+  display: block;
+  background-image: url('imagenes/calendar.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+
+.icono6 a {
+  display: block;
+  background-image: url('imagenes/consultaOrden.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+.icono7 a {
+  display: block;
+  background-image: url('imagenes/empresa.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+.icono8 a {
+  display: block;
+  background-image: url('imagenes/controlPrendas.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+.icono9 a {
+  display: block;
+  background-image: url('imagenes/usuarios.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+.icono10 a {
+  display: block;
+  background-image: url('imagenes/inventarioMP.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+.icono11 a {
+  display: block;
+  background-image: url('imagenes/agregarMP.svg');
+  background-size: 100%;
+  color: #a7a7a7;
+  margin: 36px;
+  width: 144px;
+  height: 144px;
+  position: relative;
+  text-align: center;
+  line-height: 144px;
+  border-radius: 3%;
+}
+
+.nav a:before {
+  content: "";
+  display: block;
+  background: #fff;
+  border-top: 2px solid #ddd;
+  position: absolute;
+  top: -18px;
+  left: -18px;
+  bottom: -18px;
+  right: -18px;
+  z-index: -1;
+  border-radius: 32%;
+  box-shadow: inset 0px 8px 48px #ddd;
+}
+
+
+
+

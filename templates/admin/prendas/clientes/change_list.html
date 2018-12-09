@@ -1,0 +1,68 @@
+{% extends 'admin/change_list_base.html' %}
+{% load i18n admin_list suit_list %}
+{% load i18n admin_urls static admin_modify %}
+
+
+{% block estilos %}
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+    <link href='{% static "suit/css/font-awesome.min.css" %}' rel='stylesheet' type='text/css'>
+    <link href="{% static 'imgbox/lity.css' %}" rel="stylesheet">
+    <link href="{% static 'imgbox/swipebox.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+
+{% block search %}
+
+{% suit_search_form cl %}{% endblock %}
+
+{% block filters %}
+<!-- <p  class="app" onclick=" $('#changelist-filter').removeClass('desk');" href="#">Mostrar Filtros</a> -->
+    {% if cl.has_filters %}
+        <div id="changelist-filter"  class="desk">{% for spec in cl.filter_specs|suit_list_filter_vertical:cl %}
+            {% if forloop.first %}
+                <h2>{% trans 'Filter' %}</h2>
+            {% endif %}
+            {% admin_list_filter cl spec %}
+        {% endfor %}</div>
+    {% endif %}
+{% endblock %}
+
+
+
+
+    {% block object-tools %}
+        <ul class="object-tools">
+          {% block object-tools-items %}
+            {% if has_add_permission %}
+            <li>
+              {% url cl.opts|admin_urlname:'add' as add_url %}
+              <a href="{% add_preserved_filters add_url is_popup to_field %}" class="addlink">
+                {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+              </a>
+            </li>
+            {% endif %}
+          {% endblock %}
+        </ul>
+
+
+
+
+
+
+    {% endblock %}
+
+{% block footer %}
+
+    {{ block.super }}
+
+    {% if cl.has_filters %}
+    <script src='{% static "imgbox/jquery-3.1.1.min.js" %}'></script> 
+    <script src='{% static "imgbox/lity.js" %}'></script>
+
+    
+    
+    {% endif %}
+{% endblock %}
+
+

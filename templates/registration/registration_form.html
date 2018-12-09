@@ -1,0 +1,92 @@
+
+{% load staticfiles %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block extrastyle %}
+
+    <meta name="theme-color" content="#282828" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+<link rel="stylesheet" href="{% static 'time/css/bootstrap-material-datetimepicker.css' %}">
+<link rel="stylesheet" href="{% static 'time/css/icon.css' %}">
+<link href='{% static "css/login.css" %}' rel='stylesheet' type='text/css'>
+<link href='{% static "suit/css/suit.css" %}' rel='stylesheet' type='text/css'>
+<style>
+  body{
+    
+    
+    background-
+      background-color: #fff;
+  }
+
+body::after {
+  content: "";
+  background-image: url({% static 'img/fondo.png' %}) !important;
+  background-repeat: repeat;
+  opacity: 0.3;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;   
+}
+
+  .help-block {
+    color: #9ca3a9 !important;
+    font-size: 90% !important;
+  }
+  .form {
+    max-width: 500px !important;
+  }
+  .thumbnail {
+    max-width: 500px !important;
+  }
+
+</style>
+
+{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="info">
+    <h1></h1>
+
+  </div>
+</div>
+<div class="thumbnail"><img src="{% static 'img/logo.png' %}"/></div>
+<div class="form">
+
+  <div id="content-main">
+    <form method="post" >
+      {% csrf_token %}
+      {% bootstrap_form form formset='inline' %}
+      {% buttons %}
+      <button type="submit" class="btn btn-primary" style="text-align: center; width: 100%; margin: auto 0">
+        {% bootstrap_icon "user" %} Crear cuenta
+      </button>
+      {% endbuttons %}
+      <a href="/admin/" class="btn btn-danger" style="text-align: center; width: 100%; margin: auto 0">Salir</a>
+    </form>
+  </div>
+</div>
+
+{% block extrajs %}
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'time/js/material.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'time/js/moment-with-locales.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'time/js/bootstrap-material-datetimepicker.js' %}"></script>   
+<script type="text/javascript">
+  $( document ).ready(function() {
+    $('#id_fecha_cumpleanios').bootstrapMaterialDatePicker({ weekStart : 0, time: false });
+  });
+</script>
+
+{% endblock extrajs %}
+
+
+
+
+{% endblock %}

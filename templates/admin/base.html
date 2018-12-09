@@ -1,0 +1,292 @@
+{% extends 'admin/base_site.html' %}
+{% load i18n admin_static suit_tags %}
+
+{% block stylesheet %}{% static "suit/css/suit.css" %}{% endblock %}
+
+{% block extrastyle %}
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'>
+    <link href='{% static "suit/css/font-awesome.min.css" %}' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <style>
+        body.suit_layout_vertical #suit-nav {
+            -ms-flex-preferred-size: 100%;
+            flex-basis: 100%;
+            background-color: rgb(228, 153, 67);
+        }
+
+        body.suit_layout_vertical #header .suit-user-tools {
+            background-color: #FEA43F;
+            padding: 1.14583rem 0.9375rem;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        body.suit_layout_vertical #suit-nav > ul > li.active {
+            background-color: #FEA43F;
+        }
+
+        body.suit_layout_vertical #suit-nav > ul > li:not(.active):hover {
+            background-color: #FEA43F;
+        }
+
+        body.suit_layout_vertical #suit-nav > ul > li:not(.active):hover > ul > li > a:hover {
+            background-color: #FEA43F;
+        }
+
+        /* body.suit_layout_vertical #suit-nav > ul > li > ul > li.active a {
+            box-shadow: inset 4px 0 0 #97928E;
+        } */
+
+        #result_list thead > tr th, .tabular table thead > tr th, table#change-history thead > tr th {
+            box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.2);
+            font-weight: normal;
+            background-color: #97928E;
+            color: #eceeef;
+            padding: 0;
+            position: relative;
+            line-height: normal;
+        }
+
+        .btn-primary, .submit-row input[type="submit"]:not([class*="btn-"]):first-child, .submit-row input[type="button"]:not([class*="btn-"]):first-child, .submit-row button:not([class*="btn-"]):first-child, body.login .submit-row input[type="submit"], #changelist #toolbar #changelist-search input[type="submit"], #changelist #changelist-form .actions button, #changelist #changelist-form .paginator input[type="submit"] {
+            color: #fff;
+            background-color: #97928E;
+            border-color: #97928E;
+        }
+
+        .btn-primary:hover, .submit-row input[type="submit"]:hover:not([class*="btn-"]):first-child, .submit-row input[type="button"]:hover:not([class*="btn-"]):first-child, .submit-row button:hover:not([class*="btn-"]):first-child, body.login .submit-row input[type="submit"]:hover, #changelist #toolbar #changelist-search input[type="submit"]:hover, #changelist #changelist-form .actions button:hover, #changelist #changelist-form .paginator input[type="submit"]:hover {
+            color: #fff;
+            background-color: rgb(128, 128, 128);
+            border-color: rgb(128, 128, 128);
+        }
+
+        #result_list thead > tr th.sorted, .tabular table thead > tr th.sorted, table#change-history thead > tr th.sorted {
+            background-color: rgb(128, 128, 128);
+        }
+
+        .btn-success, #content-main > .object-tools > li > a.addlink:not([class*="btn-"]) {
+            color: #fff;
+            background-color: #FEA43F;
+            border-color: #FEA43F;
+        }
+
+        .btn-success:hover, #content-main > .object-tools > li > a.addlink:hover:not([class*="btn-"]) {
+            color: #fff;
+            background-color: #FEA43F;
+            border-color: #FEA43F;
+        }
+
+        #changelist #changelist-filter h3 {
+            background-color: #97928E;
+            color: #fff;
+            font-size: 0.929rem;
+            font-weight: normal;
+            padding: 0.46875rem 0.625rem;
+            margin: 0;
+        }
+
+        .inline-group .inline-related h3 {
+            margin: 0;
+            color: #fff;
+            font-size: 1rem;
+            padding: 0.7rem 0.8rem;
+            font-weight: normal;
+            background-color: #97928E;
+        }
+
+        fieldset .form-row label, fieldset .suit-form .form-group label {
+            font-size: 0.929rem;
+            color: #000;
+        }
+
+        .btn-success:active:hover, #content-main > .object-tools > li > a.addlink:active:hover:not([class*="btn-"]), .btn-success:active:focus, #content-main > .object-tools > li > a.addlink:active:focus:not([class*="btn-"]), .btn-success:active.focus, #content-main > .object-tools > li > a.addlink:active.focus:not([class*="btn-"]), .btn-success.active:hover, #content-main > .object-tools > li > a.active.addlink:hover:not([class*="btn-"]), .btn-success.active:focus, #content-main > .object-tools > li > a.active.addlink:focus:not([class*="btn-"]), .btn-success.active.focus, #content-main > .object-tools > li > a.active.focus.addlink:not([class*="btn-"]), .open > .btn-success.dropdown-toggle:hover, #content-main > .object-tools > li.open > a.dropdown-toggle.addlink:hover:not([class*="btn-"]), .open > .btn-success.dropdown-toggle:focus, #content-main > .object-tools > li.open > a.dropdown-toggle.addlink:focus:not([class*="btn-"]), .open > .btn-success.dropdown-toggle.focus, #content-main > .object-tools > li.open > a.dropdown-toggle.focus.addlink:not([class*="btn-"]) {
+            color: #fff;
+            background-color: #FEA43F;
+            border-color: #FEA43F;
+        }
+
+        .btn-primary:active:hover, .submit-row input[type='submit']:active:hover:not([class*="btn-"]):first-child, .submit-row input[type='button']:active:hover:not([class*="btn-"]):first-child, .submit-row button:active:hover:not([class*="btn-"]):first-child, body.login .submit-row input[type='submit']:active:hover, #changelist #toolbar #changelist-search input[type='submit']:active:hover, #changelist #changelist-form .actions button:active:hover, #changelist #changelist-form .paginator input[type='submit']:active:hover, .btn-primary:active:focus, .submit-row input[type='submit']:active:focus:not([class*="btn-"]):first-child, .submit-row input[type='button']:active:focus:not([class*="btn-"]):first-child, .submit-row button:active:focus:not([class*="btn-"]):first-child, body.login .submit-row input[type='submit']:active:focus, #changelist #toolbar #changelist-search input[type='submit']:active:focus, #changelist #changelist-form .actions button:active:focus, #changelist #changelist-form .paginator input[type='submit']:active:focus, .btn-primary:active.focus, .submit-row input[type='submit']:active.focus:not([class*="btn-"]):first-child, .submit-row input[type='button']:active.focus:not([class*="btn-"]):first-child, .submit-row button:active.focus:not([class*="btn-"]):first-child, body.login .submit-row input[type='submit']:active.focus, #changelist #toolbar #changelist-search input[type='submit']:active.focus, #changelist #changelist-form .actions button:active.focus, #changelist #changelist-form .paginator input[type='submit']:active.focus, .btn-primary.active:hover, .submit-row input.active[type='submit']:hover:not([class*="btn-"]):first-child, .submit-row input.active[type='button']:hover:not([class*="btn-"]):first-child, .submit-row button.active:hover:not([class*="btn-"]):first-child, body.login .submit-row input.active[type='submit']:hover, #changelist #toolbar #changelist-search input.active[type='submit']:hover, #changelist #changelist-form .actions button.active:hover, #changelist #changelist-form .paginator input.active[type='submit']:hover, .btn-primary.active:focus, .submit-row input.active[type='submit']:focus:not([class*="btn-"]):first-child, .submit-row input.active[type='button']:focus:not([class*="btn-"]):first-child, .submit-row button.active:focus:not([class*="btn-"]):first-child, body.login .submit-row input.active[type='submit']:focus, #changelist #toolbar #changelist-search input.active[type='submit']:focus, #changelist #changelist-form .actions button.active:focus, #changelist #changelist-form .paginator input.active[type='submit']:focus, .btn-primary.active.focus, .submit-row input.active.focus[type='submit']:not([class*="btn-"]):first-child, .submit-row input.active.focus[type='button']:not([class*="btn-"]):first-child, .submit-row button.active.focus:not([class*="btn-"]):first-child, body.login .submit-row input.active.focus[type='submit'], #changelist #toolbar #changelist-search input.active.focus[type='submit'], #changelist #changelist-form .actions button.active.focus, #changelist #changelist-form .paginator input.active.focus[type='submit'], .open > .btn-primary.dropdown-toggle:hover, .submit-row .open > input.dropdown-toggle[type='submit']:hover:not([class*="btn-"]):first-child, .submit-row .open > input.dropdown-toggle[type='button']:hover:not([class*="btn-"]):first-child, .submit-row .open > button.dropdown-toggle:hover:not([class*="btn-"]):first-child, body.login .submit-row .open > input.dropdown-toggle[type='submit']:hover, #changelist #toolbar #changelist-search .open > input.dropdown-toggle[type='submit']:hover, #changelist #changelist-form .actions .open > button.dropdown-toggle:hover, #changelist #changelist-form .paginator .open > input.dropdown-toggle[type='submit']:hover, .open > .btn-primary.dropdown-toggle:focus, .submit-row .open > input.dropdown-toggle[type='submit']:focus:not([class*="btn-"]):first-child, .submit-row .open > input.dropdown-toggle[type='button']:focus:not([class*="btn-"]):first-child, .submit-row .open > button.dropdown-toggle:focus:not([class*="btn-"]):first-child, body.login .submit-row .open > input.dropdown-toggle[type='submit']:focus, #changelist #toolbar #changelist-search .open > input.dropdown-toggle[type='submit']:focus, #changelist #changelist-form .actions .open > button.dropdown-toggle:focus, #changelist #changelist-form .paginator .open > input.dropdown-toggle[type='submit']:focus, .open > .btn-primary.dropdown-toggle.focus, .submit-row .open > input.dropdown-toggle.focus[type='submit']:not([class*="btn-"]):first-child, .submit-row .open > input.dropdown-toggle.focus[type='button']:not([class*="btn-"]):first-child, .submit-row .open > button.dropdown-toggle.focus:not([class*="btn-"]):first-child, body.login .submit-row .open > input.dropdown-toggle.focus[type='submit'], #changelist #toolbar #changelist-search .open > input.dropdown-toggle.focus[type='submit'], #changelist #changelist-form .actions .open > button.dropdown-toggle.focus, #changelist #changelist-form .paginator .open > input.dropdown-toggle.focus[type='submit'] {
+            color: #fff;
+            background-color: #97928E;
+            border-color: #97928E;
+        }
+
+        .btn-primary:active, .submit-row input[type='submit']:active:not([class*="btn-"]):first-child, .submit-row input[type='button']:active:not([class*="btn-"]):first-child, .submit-row button:active:not([class*="btn-"]):first-child, body.login .submit-row input[type='submit']:active, #changelist #toolbar #changelist-search input[type='submit']:active, #changelist #changelist-form .actions button:active, #changelist #changelist-form .paginator input[type='submit']:active, .btn-primary.active, .submit-row input.active[type='submit']:not([class*="btn-"]):first-child, .submit-row input.active[type='button']:not([class*="btn-"]):first-child, .submit-row button.active:not([class*="btn-"]):first-child, body.login .submit-row input.active[type='submit'], #changelist #toolbar #changelist-search input.active[type='submit'], #changelist #changelist-form .actions button.active, #changelist #changelist-form .paginator input.active[type='submit'], .open > .btn-primary.dropdown-toggle, .submit-row .open > input.dropdown-toggle[type='submit']:not([class*="btn-"]):first-child, .submit-row .open > input.dropdown-toggle[type='button']:not([class*="btn-"]):first-child, .submit-row .open > button.dropdown-toggle:not([class*="btn-"]):first-child, body.login .submit-row .open > input.dropdown-toggle[type='submit'], #changelist #toolbar #changelist-search .open > input.dropdown-toggle[type='submit'], #changelist #changelist-form .actions .open > button.dropdown-toggle, #changelist #changelist-form .paginator .open > input.dropdown-toggle[type='submit'] {
+            color: #fff;
+            background-color: #97928E;
+            border-color: #97928E;
+            background-image: none;
+        }
+        {% if request.user.groups.all.0.name == "EMPRESA" %}
+        a[href="/admin/prendas/detalle_predido/"]{ display: none !important;}
+        select[data-name="controlMP_cliente_fk"]{ display: none !important;}
+        {% endif %}
+        {% if request.user.groups.all.0.name == "COMERCIANTE" %}
+        a[href="/admin/prendas/detalle_predido/"]{ display: none !important;}
+        {% endif %}
+        {% if request.user.groups.all.0.name == "LOGISTICO" %}
+        a[href="/admin/programacion/"]{ display: none !important;}
+        {% endif %}
+        a[href="/admin/prendas/inventario_materia_prima/add/"]{display: none !important;}
+    </style>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super|suit_body_class:request }}{% endblock %}
+
+{% block title %}{{ title }} | {{ site_title|default:_('Django site admin') }}{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">
+            <!--{{ site_header|default:_('Django administration') }}-->
+            <img src="{% static 'imagenes/logo.png' %}" alt="Logo Korozo" width="100px">
+            <span class="header-label">{% trans 'Admin' %}</span></a>
+    </h1>
+{% endblock %}
+
+{% block pretitle %}
+<div class="content-wrap">
+    {% block messages %}
+        {% if messages %}
+            <ul class="messagelist">{% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}</ul>
+        {% endif %}
+    {% endblock messages %}
+{% endblock %}
+
+{% block sidebar %}
+    </div> <!-- Close content-wrap -->
+{% endblock %}
+
+{% block usertools %}
+    {% if has_permission %}
+        <div id="user-tools" class="suit-user-tools">
+            {% block welcome-msg %}
+                <span class="welcome" style="color: #fff">
+                Bienvenido,
+                <strong>{% firstof user.get_short_name user.get_username %}</strong>.
+            </span>
+            {% endblock %}
+            <div class="user-links">
+            {% block userlinks %}
+                {% if site_url %}
+                    <a href="{{ site_url }}" class="icon-link view-site-link" data-title="{% trans 'View site' %}">{% trans 'View site' %}</a>
+                    <span class="separator">/</span>
+
+                {% endif %}
+                {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <a href="{{ docsroot }}" class="icon-link documentation-link" data-title="{% trans 'Documentation' %}">{% trans 'Documentation' %}</a>
+                        <span class="separator">/</span>
+                    {% endif %}
+                {% endif %}
+                {% if user.has_usable_password %}
+                    <a href="{% url 'admin:password_change' %}" class="icon-link change-password-link" data-title="{% trans 'Change password' %}">{% trans 'Change password' %}</a>
+                    <span class="separator">/</span>
+                {% endif %}
+                <a href="{% url 'admin:logout' %}" class="icon-link logout-link" data-title="{% trans 'Log out' %}">{% trans 'Log out' %}</a>
+            {% endblock %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block nav-global %}
+    {% include 'suit/menu.html' %}
+{% endblock %}
+
+{% block footer %}
+{#    </div> <!-- Put footer outside #container -->#}
+    {% if not is_popup %}
+        <div id="footer">
+        <footer class="footer">
+            <div class="container-fluid">
+                {% block footer_content %}
+                    <div class="row">
+
+                        <div class="col-xs-12 col-sm-3 footer-links">
+                            {% block footer_links %}
+                                <a href="#" target="_blank">TEAMWORK</a>
+                                <a href="#" target="_blank">PASSION</a>
+                                <a href="#" target="_blank">INNOVATION</a>
+                            {% endblock %}
+                        </div>
+
+                        <div class="col-xs-12 col-sm-6 text-sm-center footer-copyright">
+                            {% block copyright %}
+                                Copyright &copy;
+                                <span class="hidden-md-down">2015-</span>{% now "Y" %} KOROZO S.A.S
+                                <br>Developed by
+                                <a href="#" target="_blank">DEPARTAMENTO DE SISTEMAS</a>
+                            {% endblock %}
+                        </div>
+
+                        <div class="col-xs-12 col-sm-3 text-sm-right footer-version">
+                            {% block footer_branding %}
+                                {% with admin_name=site_header|default:_('Django administration') django_version='django_version'|suit_conf:request %}
+                                    {{ admin_name }}
+                                    {% if admin_name == 'Django Suit' %}
+                                        <span style="font-size: 12px">
+                                            {{ 'version'|suit_conf:request }}<br/>
+                                            Django {{ django_version }}
+                                        </span>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endblock %}
+                        </div>
+
+                    </div>
+                {% endblock %}
+            </div>
+        </footer>
+    {% endif %}
+
+{#    {{ block.super }}#}
+    <script src="{% static "suit/js/suit.js" %}"></script>
+    {% if cl.formset or action_form and 'toggle_changelist_top_actions'|suit_conf:request %}
+        <script type="text/javascript">
+            Suit.ListActionsToggle.init();
+        </script>
+    {% elif adminform %}
+        <script type="text/javascript">
+
+            Suit.$("#{{ opts.model_name }}_form").suitFormDebounce();
+
+            {% if 'form_submit_on_right'|suit_conf:request %}
+                Suit.FixedBar.init();
+            {% endif %}
+
+            {% if adminform.model_admin.suit_form_tabs %}
+                Suit.$(function () {
+                    Suit.$('#suit_form_tabs').suitFormTabs();
+                });
+            {% endif %}
+
+{#            {% if 'layout'|suit_conf:request.current_app == 'vertical' %}#}
+{#                Suit.$('#content').prepend(Suit.$('.breadcrumbs'));#}
+{#            {% endif %}#}
+        </script>
+
+    
+    {% endif %}
+
+
+
+    
+{#    <div> <!-- Fix/close div previously closed by footer -->#}
+    
+    <!--<script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    
+     <script type="text/javascript" src="{% static 'js/jquery-ui.js' %}"></script>
+    <script src="{% static 'steps/jquery.steps.js' %}"></script>
+    <script src="{% static 'js/bootstrap-dialog.js' %}"></script>
+    <script src="{% static 'js/moment.min.js' %}"></script>
+    <script src="{% static 'time_date/js/bootstrap-material-datetimepicker.js' %}"></script>
+    <script src="{% static 'js/fullcalendar.min.js' %}"></script>
+    <script src="{% static 'js/es.js' %}"></script>
+    <script src="{% static 'js/jquery.blockUI.js' %}"></script>
+    <script src="{% static 'imgbox/lity.js' %}"></script> -->
+    
+{% endblock %}

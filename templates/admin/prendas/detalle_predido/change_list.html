@@ -1,0 +1,355 @@
+{% extends 'admin/change_list_base.html' %}
+{% load i18n admin_list suit_list %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block search %}
+
+{% suit_search_form cl %}{% endblock %}
+<link rel="stylesheet" href="{% static 'bootstrap-3/css/bootstrap.css' %}">
+
+{% block filters %}
+<!-- <a  class="app" onclick=" $('#changelist-filter').removeClass('desk');" href="#">Mostrar Filtros</a> -->
+    {% if cl.has_filters %}
+        <div id="changelist-filter"  class="desk">{% for spec in cl.filter_specs|suit_list_filter_vertical:cl %}
+            {% if forloop.first %}
+                <h2>{% trans 'Filter' %}</h2>
+            {% endif %}
+            {% admin_list_filter cl spec %}
+        {% endfor %}</div>
+    {% endif %}
+{% endblock %}
+
+
+    {% block object-tools %}
+        <ul class="object-tools">
+          {% block object-tools-items %}
+            {% if has_add_permission %}
+            <!-- <li>
+              {% url cl.opts|admin_urlname:'add' as add_url %}
+              <a href="{% add_preserved_filters add_url is_popup to_field %}" class="addlink">
+                {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+              </a>
+            </li> -->
+            {% endif %}
+          {% endblock %}
+          {% if request.user.groups.all.0.name == "LOGISTICO" %}
+             <li>
+              {% url cl.opts|admin_urlname:'add' as add_url %}
+                <a href="/admin/prendas/factura_compramp/add/" class="button acctio_b"><i class="fa fa-plus"></i> Realizar Compra</a> 
+            </li> 
+            {% endif %}
+            <!-- <li>
+                {% url cl.opts|admin_urlname:'add' as add_url %}
+                  <a href="/admin/planificador/" class="button acctio_b"><i class="fa fa-eye"></i> Revisar Inventario De Prenda</a> 
+            </li>  -->
+        </ul>
+
+
+<style type="text/css">
+    .espacio{
+            margin-left: 5px;
+    }
+</style>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            ...
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade bs-example-modal-lg" id="modal_info" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">ORDEN DE COMPRA</h4>
+            </div>
+            <div class="modal-body" style="height: 400px;">
+                <iframe id="ifrm" src="" height="100%" width="100%"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" tabindex="-1" id="modal_mp" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">INVENTARIO MATERIA PRIMA</h4>
+        </div>
+        <div class="modal-body">
+            <br>
+            <h3 style="text-align: center">INFORMACIÓN DEL INVENTARIO</h3>
+            <div id="resultado"></div>
+            <br>
+            <h3 style="text-align: center">INFORMACIÓN DEL PEDIDO</h3>
+            <div id="info"></div>
+            <br>
+            <div id="cant"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-success" id="asignacion_mp">Realizar asignacion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Modal -->
+<div class="modal fade" tabindex="-1" id="modal_prenda" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">INVENTARIO DE PRENDA</h4>
+        </div>
+        <div class="modal-body">
+            <br>
+            <h3 style="text-align: center">INFORMACIÓN DEL INVENTARIO</h3>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <th>Materia Prima</th>
+                    <th>Color</th>
+                    <th>Tipo de Prenda</th>
+                    <th>Talla</th>
+                    <th>Stock</th>
+                </thead>
+                <tbody id="resultado_p">
+                </tbody>
+            </table>
+            <br>
+            <h3 style="text-align: center">INFORMACIÓN DEL PEDIDO</h3>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <th>Materia Prima</th>
+                    <th>Color</th>
+                    <th>Tipo de Prenda</th>
+                    <th>Talla</th>
+                    <th>Prendas Necesarias</th>
+                </thead>
+                <tbody id="info_p">
+                </tbody>
+            </table>
+            <br>
+            <div id="talla"></div>
+            <br>
+            <div id="cant_p"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-success" id="asignacion_prenda">Realizar asignacion</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  {% endblock %}
+
+  {% block footer %}
+  
+      {{ block.super }}
+  
+      {% if cl.has_filters %}
+      <script src='{% static "js/jquery.min.js" %}'></script>
+      <script src='{% static "bootstrap-3/js/bootstrap.min.js" %}'></script>
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript">
+    
+    var cant_inv = 0, cant_necesaria = 0, mp_asig = 0, cl_asig = 0, pk_pedido = 0;
+    function inv_mat_prima(mp,cl,cant_nec,pk){
+        var materia_prima = mp
+        var color = cl
+        if (materia_prima != null && color != null){
+            $.get("/inventario-materia-prima/?mp="+materia_prima+"&cl="+color, function(respuesta){
+                if (respuesta != null && respuesta != "" && respuesta != undefined){
+                    if (respuesta == "fallo"){
+                        $("#resultado").html('<table class="table table-bordered table-striped"><th>Materia Prima</th><th>Color</th><th>Stock</th><tr><td>Sin resultado</td><td>Sin resultado</td><td>Sin resultado</td></tr></table>')
+                        $("#info").html("")
+                        $("#modal_mp").modal("show");
+                    }else{
+                        $.each(respuesta, function(index){
+                        $("#resultado").html('<table class="table table-bordered table-striped"><th>Materia Prima</th><th>Color</th><th>Stock</th><tr><td>'+respuesta[index].mp+'</td><td>'+respuesta[index].cl+'</td><td>'+respuesta[index].cant+' m</td></tr></table>')
+                        $("#info").html('<table class="table table-bordered table-striped"><th>Materia Prima</th><th>Color</th><th>Tela Necesaria</th><tr><td>'+respuesta[index].mp+'</td><td>'+respuesta[index].cl+'</td><td>'+cant_nec+' m</td></tr></table>')  
+                        cant_inv = respuesta[index].cant
+                        cant_necesaria = cant_nec
+                        
+                        });
+                        $("#cant").html('<input type="number" class="form-control" id="cant_asig" placeholder="Cantidad asignar de materia prima">')
+                        mp_asig = mp
+                        cl_asig = cl
+                        pk_pedido = pk
+                        $("#modal_mp").modal("show");
+                        
+                    }
+                }
+            });
+        }
+    }
+
+    $("#asignacion_mp").click(function(){
+        var cant_asig = $("#cant_asig").val()
+        if (cant_asig == ""){
+            swal({
+                title: "Campo Vacio",
+                text: "Por favor ingrese la cantidad de tela asignar.",
+                icon: "warning",
+                button: "Aceptar",
+            })
+        }
+        if (cant_asig > cant_inv){
+            swal({
+                title: "Cantidad Incorrecta",
+                text: "La cantidad asignada supera el stock de materia prima",
+                icon: "error",
+                button: "Aceptar",
+            });
+        }else{
+            if (cant_asig > cant_necesaria){
+                swal({
+                title: "Cantidad Incorrecta",
+                text: "La cantidad asignada supera la cantidad de materia prima necesaria",
+                icon: "error",
+                button: "Aceptar",
+            });
+            }else{
+                $.post("/asignacion-materia-prima/", {'cant':cant_asig,'mp':mp_asig,'cl':cl_asig,'pk':pk_pedido}, function(data){
+                    if (data != null && data != "" && data != undefined){
+                        if (data == "ok"){
+                            swal({
+                                title: "Cantidad Asignada",
+                                text: "Se asignaron "+cant_asig+" metros de tela con exito!",
+                                icon: "success",
+                                button: "Aceptar",
+                            }).then(function(){ 
+                                location.reload();
+                                });
+                        }
+                    }
+                });
+            }
+        }
+
+    });
+
+    var cant_inv_p=0,mp_asig_p=0,cl_asig_p=0,pk_pedido_p=0,prenda_asig=0
+    function inv_prenda(mp,cl,prenda,cant_prendas,pk){
+        if (mp != null && cl != null && prenda != null){
+            $.get("/inventario-prenda/?mp="+mp+"&cl="+cl+"&prenda="+prenda+"&pk="+pk, function(respuesta){
+                if (respuesta != null && respuesta != "" && respuesta != undefined){
+                    if (respuesta == "fallo"){
+                        $("#resultado_p").empty()
+                        $("#info_p").empty()
+                        $("#resultado_p").append('<tr><td>Sin resultado</td><td>Sin resultado</td><td>Sin resultado</td><td>Sin resultado</td><td>Sin resultado</td></tr>')
+                        $("#info_p").append('<tr><td>Sin resultado</td><td>Sin resultado</td><td>Sin resultado</td><td>Sin resultado</td><td>Sin resultado</td></tr>')
+                        
+                        $("#modal_prenda").modal("show");
+                    }else{
+                        $("#resultado_p").empty()
+                        $("#info_p").empty()
+                        $.each(respuesta, function(index){
+                            $("#resultado_p").append('<tr><td>'+respuesta[index].mp+'</td><td>'+respuesta[index].cl+'</td><td>'+respuesta[index].pr+'</td><td>'+respuesta[index].talla+'</td><td>'+respuesta[index].cant+' Unidades</td></tr>')
+                            
+                            $.each(respuesta[index].pedido_actual, function(v){
+                                $("#info_p").append('<tr><td>'+respuesta[index].pedido_actual[v].mat_prima+'</td><td>'+respuesta[index].pedido_actual[v].color+'</td><td>'+respuesta[index].pedido_actual[v].prenda+'</td><td>'+respuesta[index].pedido_actual[v].tallas+'</td><td>'+respuesta[index].pedido_actual[v].cantidad+' Unidades</td></tr></table>')                
+                            });
+                        });
+                        $("#talla").html('<input type="text" class="form-control" id="talla_asig" placeholder="Talla asignar de prendas">')                                            
+                        $("#cant_p").html('<input type="number" class="form-control" id="cant_asig_p" placeholder="Cantidad asignar de prendas">')                    
+                        mp_asig_p = mp
+                        cl_asig_p = cl
+                        pk_pedido_p = pk
+                        prenda_asig = prenda
+                        $("#modal_prenda").modal("show");
+                        
+                    }
+                }
+            });
+        }
+    }
+
+    $("#asignacion_prenda").click(function(){
+        var cant_asig_p = $("#cant_asig_p").val()
+        var talla_asig_prenda = $("#talla_asig").val()
+        // if (cant_asig > cant_inv){
+        //     swal({
+        //         title: "Cantidad Incorrecta",
+        //         text: "La cantidad asignada supera el stock de materia prima",
+        //         icon: "error",
+        //         button: "Aceptar",
+        //     });
+        // }else{
+        //     if (cant_asig > cant_necesaria){
+        //         swal({
+        //         title: "Cantidad Incorrecta",
+        //         text: "La cantidad asignada supera la cantidad de materia prima necesaria",
+        //         icon: "error",
+        //         button: "Aceptar",
+        //     });
+        //     }
+        //    else{
+        if (cant_asig_p != "" && talla_asig_prenda != ""){
+        $.post("/asignacion-prenda/", {'cant':cant_asig_p,'mp':mp_asig_p,'cl':cl_asig_p,'pk':pk_pedido_p,'pr':prenda_asig,'talla':talla_asig_prenda}, function(data){
+            if (data != null && data != "" && data != undefined){
+                if (data == "ok"){
+                    swal({
+                        title: "Cantidad Asignada",
+                        text: "Se asignaron "+cant_asig_p+" prendas con exito!",
+                        icon: "success",
+                        button: "Aceptar",
+                    }).then(function(){ 
+                        location.reload();
+                        });
+                }
+            }
+        });
+        }else{
+            swal({
+                title: "Campos Vacios",
+                text: "Por favor ingrese todos los campos para realizar la asignacion de prendas.",
+                icon: "warning",
+                button: "Aceptar",
+            })
+        }
+        //    }
+        //}
+
+    });
+
+    function corte(corte){
+    $('#ifrm').attr('src', "/prueba/?pk="+corte);
+    $("#modal_info").modal("show"); 
+    //window.open("/prueba/");
+    }
+
+    function confeccion(pk){
+    $('#ifrm').attr('src', "/orden-confeccion/?pk="+pk);
+    $("#modal_info").modal("show"); 
+    //window.open("/prueba/");
+    }
+
+    function logo(pk){
+    $('#ifrm').attr('src', "/orden-logo/?pk="+pk);
+    $("#modal_info").modal("show"); 
+    //window.open("/prueba/");
+    }
+
+  
+  
+    // Handle change list filter null values
+    Suit.$('.search-filter').suitSearchFilters();
+</script>
+      {% endif %}
+  {% endblock %}
+  

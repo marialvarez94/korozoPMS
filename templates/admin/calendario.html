@@ -1,0 +1,328 @@
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block extrahead %}
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9"crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'bootstrap-3/css/bootstrap.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<link rel='stylesheet' href='{% static "calendar/fullcalendar.min.css" %}' />
+<style>
+.progress-bar {
+    float: left;
+    width: 0;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    color: #fff;
+    text-align: center;
+    background-color: #FEA43F;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15);
+    -webkit-transition: width .6s ease;
+    -o-transition: width .6s ease;
+    transition: width .6s ease;
+}
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus {
+    color: #fff;
+    background-color: #FEA43F;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #FEA43F;
+    border-color: rgb(236, 152, 55);
+}
+.btn-primary:active:hover, .btn-primary.active:hover, .open > .dropdown-toggle.btn-primary:hover, .btn-primary:active:focus, .btn-primary.active:focus, .open > .dropdown-toggle.btn-primary:focus, .btn-primary:active.focus, .btn-primary.active.focus, .open > .dropdown-toggle.btn-primary.focus {
+    color: #fff;
+    background-color: rgb(230, 156, 72);
+    border-color: rgb(196, 131, 58);
+}
+.btn-primary:hover, .submit-row input[type='submit']:hover:not([class*="btn-"]):first-child, .submit-row input[type='button']:hover:not([class*="btn-"]):first-child, .submit-row button:hover:not([class*="btn-"]):first-child, body.login .submit-row input[type='submit']:hover, #changelist #toolbar #changelist-search input[type='submit']:hover, #changelist #changelist-form .actions button:hover, #changelist #changelist-form .paginator input[type='submit']:hover {
+    color: #fff;
+    background-color: rgb(230, 156, 72);
+    border-color: rgb(196, 131, 58);
+}
+.btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+    color: #fff;
+    background-color: rgb(230, 156, 72);
+    border-color: rgb(196, 131, 58);
+}
+body.suit_layout_vertical:not(.login) #container #content {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding-bottom: 96px;
+    padding-top: 4rem;
+    margin-right: 100px;
+}
+body.suit_layout_vertical:not(.login) #container {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
+    -ms-flex-line-pack: start;
+    align-content: flex-start;
+    max-width: 100% !important;
+}
+
+/* CSS SELECT2 */
+
+</style>
+
+<script src='{% static "js/jquery.min.js" %}'></script>
+<script src='{% static "bootstrap-3/js/bootstrap.min.js" %}'></script>
+<script src="{% static 'js/jquery.bootstrap.wizard.js' %}"></script>
+<script src="{% static 'js/prettify.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src='{% static "calendar/lib/moment.min.js" %}'></script>
+<script src='{% static "calendar/fullcalendar.min.js" %}'></script>
+
+<script>
+$(document).ready(function() {
+        $('#rootwizard').bootstrapWizard({onNext: function(tab, navigation, index) {
+            
+            if(index==1) {
+                
+                // Make sure we entered the name
+                if(!$('#state').val()) {
+                    $("#state").validate();
+                }
+                }
+            
+    
+            // Set the name for the next tab
+            $('#tab3').html('Hello, ' + $('#name').val());
+    
+        }, onTabShow: function(tab, navigation, index) {
+            var $total = navigation.find('li').length;
+            var $current = index+1;
+            var $percent = ($current/$total) * 100;
+            $('#rootwizard .progress-bar').css({width:$percent+'%'});
+        }});
+
+        // In your Javascript (external .js resource or <script> tag)
+
+        $('.js-example-basic-single').select2();
+
+});
+</script>
+
+<script>
+    $(function () {
+
+        // page is now ready, initialize the calendar...
+    $("#state").change(function(){
+        var orden_pk = $('#state').val()
+        
+        var events = {
+            url: '/programacion/',
+            type: 'POST',
+            data: {
+                pk: orden_pk,
+                //custom_param2: 'somethingelse'
+            }
+    }
+
+    $('#calendar').fullCalendar('removeEventSource', events);
+    $('#calendar').fullCalendar('addEventSource', events);
+    $('#calendar').fullCalendar('refetchEvents');
+        $('#calendar').fullCalendar({            
+            defaultView: 'month',
+            eventLimit: true,
+            
+            
+            eventSources: [
+                {
+                    url: '/programacion/',
+                    type: 'POST',
+                    data: {
+                        pk: orden_pk,
+                        //custom_param2: 'somethingelse'
+                    },
+                    //color: 'yellow',
+                    //textColor: 'black',
+
+                    error: function () {
+                        alert('Ha ocurrido un error al cargar la orden de compra');
+                    }
+                }
+            ],
+
+            eventClick: function (calEvent, jsEvent, view) {
+                    var pk_event = calEvent.id
+                    if (pk_event != null && pk_event != "" && pk_event != undefined){
+                        $.post("/detalle-orden/", {'pk':pk_event}, function (json) {
+                            if (json != null && json != undefined && json != ""){
+                                $("#num_pedido").val(json[0].num_pedido)
+                                $("#cliente_fk").val(json[0].cliente_fk);
+                                $("#digitador").val(json[0].digitador)
+                                $("#estado").val(json[0].estado)                        
+                            }
+                        });
+                        
+                        $('#myModal').modal('show')
+                    }
+            },
+
+            header: {
+                left: 'agendaDay,month,list',
+                center: 'title',
+                right: 'today prev,next',
+            },
+
+            buttonText: {
+                today: 'Hoy',
+                month: 'Mes',
+                week: 'Semana',
+                day: 'Dia',
+                list: 'Lista'
+            },
+
+            theme: 'bootstrap4',
+
+            buttonIcons: {
+                prev: 'circle-triangle-w',
+                next: 'circle-triangle-e',
+                prevYear: 'seek-prev',
+                nextYear: 'seek-next'
+            },
+
+            views: {
+                agenda: {
+                    eventLimit: 6 // adjust to 6 only for agendaWeek/agendaDay
+                },
+
+                month: { // name of view
+                    eventLimit: 6,
+                    eventLimitText: 'Ver Más'
+                    // other view-specific options here
+                }
+            },
+
+            dayNames:
+                ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves',
+                    'Viernes', 'Sabado'],
+
+            dayNamesShort:
+                ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
+
+            monthNames:
+                ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+
+            locale: "es",
+
+
+        });
+    });
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+    {% if request.user.groups.all.0.name == "LOGISTICO" %}
+        <h1 class="text-center">No tienes permisos para acceder a esta vista</h1>
+    {% else %}
+<!-- <div class="row" style="width: 90%">
+    <div class="col-md-12"> -->
+<div class="container">
+        <div id="rootwizard">
+            <div class="navbar">
+                <div class="navbar-inner">
+                <div class="container">
+            <ul>
+                <li><a href="#tab1" data-toggle="tab">First</a></li>
+                <li><a href="#tab2" data-toggle="tab">Calendario</a></li>
+            </ul>
+                </div>
+                </div>
+            </div>
+            <div id="bar" class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
+            </div>
+            <div class="tab-content">
+                <div class="tab-pane" id="tab1">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="text-center">
+                            <select class="js-example-basic-single" id="state" style="width: 400px; height: 100px;">
+                                <option value="" disabled selected>--Seleccione--</option>
+                                {% for orden in ordenes %}
+                                    <option value="{{orden.pk}}">{{orden.titulo}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane" id="tab2">
+                    <div id="calendar"></div>
+                </div>
+                <ul class="pager wizard">
+                    <li class="previous first" style="display:none;"><a href="#">First</a></li>
+                    <li class="previous"><a href="#">Anterior</a></li>
+                    <li class="next last" style="display:none;"><a href="#">Last</a></li>
+                        <li class="next"><a href="#">Siguiente</a></li>
+                </ul>
+            </div>
+        </div>
+    <!-- </div>-->
+</div> 
+
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Detalle Orden De Pedido</h4>
+                </div>
+                <div class="modal-body">            
+                    <form>
+                        <div class="form-group">
+                          <label for="num_pedido">Orden de compra</label>
+                          <input type="text" class="form-control" id="num_pedido" readonly>
+                        </div>
+        
+                        <div class="form-group">
+                          <label for="cliente_fk">Cliente</label>
+                          <input type="text" class="form-control" id="cliente_fk" readonly>
+                        </div>
+        
+                        <div class="form-group">
+                          <label for="digitador">Creador de la orden</label>
+                          <input type="text" class="form-control" id="digitador" readonly>
+                        </div>
+        
+                        <div class="form-group">
+                          <label for="estado">Estado</label>
+                          <input type="text" class="form-control" id="estado" readonly>
+                        </div>
+                      </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Aceptar</button>
+                </div>
+              </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+          </div><!-- /.modal -->
+{% endif %}
+{% endblock %}
+
+{% block extrajs %}
+
+{% endblock %}
